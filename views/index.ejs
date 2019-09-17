@@ -62,7 +62,7 @@
                     options: Object.assign({}, config, {
                         title:{
                             display: true,
-                            text: "Heart Rate Monitor",
+                            text: "Heart Rate Live Chart",
                             fontSize: 22
                         }
                     })
@@ -95,11 +95,16 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-8">
                     <div class="card">
                         <div class="card-body">
                             <canvas id="HeartRateChart"></canvas>
                         </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div style="height: 100%" class="card">
+                        <h2 style="text-align: center;">Heart Rate (BPM)</h2>
                     </div>
                 </div>
             </div>
