@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Heart Rate Plot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- load in bootstrap and related files for it -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>   
+        
+        
+        <!-- load in chart.js and related files for it -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+
+        <script>
+
+            window.onload = function(){
+                var socket = io(); //connect to server
+
+                // Configuration variables
+                var numberElements = 200;
+
+                // Globals
+                var updateCount = 0;
+
+                // chart objects
+                var HeartRateChart = document.getElementById('HeartRateChart').getContext('2d');
+
+                // config for the chart
+                var config = {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMax: 70
+                            }
+                        }]
+                    },
+                    legend: {display: false},
+                    tooltips: {
+                        enabled: false
+                    }
+                }
+
+                // create a new chart
+                var myChart = new Chart(HeartRateChart, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: "Heart Rate",
+                            data: [],
+                            fill: false,
+                            borderColor: '#3498DB',
+                            borderWidth: 2,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: Object.assign({}, config, {
+                        title:{
+                            display: true,
+                            text: "Heart Rate Monitor",
+                            fontSize: 22
+                        }
+                    })
+                });
+            
+                // update the chart from the data collected through the serial
+                socket.on('rate', function(data){
+                    console.log(data.rate); // log data on console
+
+                    myChart.data.labels.push(data.time);
+                    myChart.data.datasets.forEach((dataset) => {dataset.data.push(data.rate)});
+                    
+                    // scroll the graph
+                    if(updateCount > numberElements){
+                        myChart.data.labels.shift();
+                        myChart.data.datasets[0].data.shift();
+                    } else { updateCount++; }
+
+                    myChart.update(); // Update the graph.
+                });
+            }
+
+        </script>
+
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="#page-top">HeartApp</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="fitnessMode">Fitness Mode</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="stressMonitoringMode">Stress Monitoring Mode</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="meditationMode">Meditation Mode</a>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="HeartRateChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+    <style>
+        body {
+            padding-top: 70px;
+        }
+    </style>
+</html>
