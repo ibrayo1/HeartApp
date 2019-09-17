@@ -15,20 +15,24 @@ app.get('/', function(req, res){
     res.render('index');
 });
 
+// get request for fitness mode page
 app.get('/fitnessMode', function(req, res){
     res.render('fitnessMode');
 });
 
+// get request for stress monitoring mode page
 app.get('/stressMonitoringMode', function(req, res){
     res.render('stressMonitoringMode');
 });
 
+// get request for meditation mode page
 app.get('/meditationMode', function(req, res){
     res.render('meditationMode');
 });
 
 
-server.listen(3000, () => { // Start the server, listening on port 4000.
+// Start the server, listening on port 3000
+server.listen(3000, () => {
     console.log("Listening to requests on port 3000...");
 });
 
