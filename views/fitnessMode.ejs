@@ -3,10 +3,137 @@
 
 <head>
     <%- include('header') %>
+
+    <script>
+        window.onload = function(){
+            var socket = io(); //connect to server
+
+            // Configuration variables
+            var numberElements = 200;
+
+            // Globals
+            var updateCount = 0;
+
+            // chart objects
+            var HeartRateChart = document.getElementById('HeartRateChart').getContext('2d');
+            var RespiratoryChart = document.getElementById('RespiratoryRateChart').getContext('2d');
+
+            // config for the chart
+            var config = {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMax: 70
+                        }
+                    }]
+                },
+                legend: {display: false},
+                tooltips: {
+                    enabled: false
+                }
+            }
+
+            // create a new for the heart rate chart
+            var heartChart = new Chart(HeartRateChart, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "Heart Rate",
+                        data: [],
+                        fill: false,
+                        borderColor: '#3498DB',
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }]
+                },
+                options: Object.assign({}, config, {
+                    title:{
+                        display: true,
+                        text: "Heart Rate Live Chart",
+                        fontSize: 22
+                    }
+                })
+            });
+
+            var respiratoryChart = new Chart(RespiratoryChart, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "Respiratory Rate",
+                        data: [],
+                        fill: false,
+                        borderColor: '#3498DB',
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }]
+                },
+                options: Object.assign({}, config, {
+                    title:{
+                        display: true,
+                        text: "Respiratory Rate Live Chart",
+                        fontSize: 22
+                    } 
+                })
+            });
+        
+            // update the chart from the data collected through the serial
+            socket.on('rate', function(data){
+                console.log(data.rate); // log data on console
+
+                heartChart.data.labels.push(data.time);
+                heartChart.data.datasets.forEach((dataset) => {dataset.data.push(data.rate)});
+                
+                // scroll the graph
+                if(updateCount > numberElements){
+                    heartChart.data.labels.shift();
+                    heartChart.data.datasets[0].data.shift();
+                } else { updateCount++; }
+
+                heartChart.update(); // Update the graph.
+            });
+        }
+
+    </script>
 </head>
 
 <body>
-    <h1>Fitness Mode</h1>
+    <br/><br/><br/>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="HeartRateChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div style="height: 100%" class="card">
+                    <h4 style="text-align: center;">Heart Rate (BPM)</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="RespiratoryRateChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div style="height: 100%" class="card">
+                    <h4 style="text-align: center;">Respiratory Rate (BPM)</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
