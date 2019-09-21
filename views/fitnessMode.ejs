@@ -53,6 +53,12 @@
                         display: true,
                         text: "Heart Rate Live Chart",
                         fontSize: 22
+                    }, scales: { // this hides the x-axis since we don't really need it
+                        xAxes: [{
+                            ticks: {
+                                display: false
+                            }
+                        }]
                     }
                 })
             });
@@ -75,6 +81,12 @@
                         display: true,
                         text: "Respiratory Rate Live Chart",
                         fontSize: 22
+                    }, scales: { // this hides the x-axis since we don't really need it
+                        xAxes: [{
+                            ticks: {
+                                display: false
+                            }
+                        }]
                     } 
                 })
             });
