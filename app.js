@@ -48,10 +48,13 @@ parser.on('data', (rate) => { // Read data
     io.sockets.emit('rate', { time: (today.getMinutes())+":"+(today.getSeconds())+":"+(today.getMilliseconds()), rate: rate });
 });
 
-io.on('user_age_input', function(input){
-    port.write(input);
-});
 
 io.on('connection', (socket) => {
     console.log("Someone connected."); //show a log as a new client connects.
+
+    // listen to data being sent from 
+    socket.on('user_age_input', function(input){
+        // console.log(input);
+        port.write(input);
+    });
 });

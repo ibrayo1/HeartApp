@@ -99,6 +99,21 @@
 
                 heartChart.update(); // Update the graph.
             });
+
+            // disables the user from pressing enter on form input
+            $('form input').keydown(function(event){
+                if(event.keyCode == 13) {
+                event.preventDefault();
+                    return false;
+                }
+            });
+
+            // 
+            document.getElementById('submit_btn').addEventListener("click", function(){
+                var val = document.getElementById('age_input').value; // get the value from the user
+                socket.emit('user_age_input', val.toString() + ',fitnessMode'); // send the data to server
+                document.getElementById('age_input').value = ""; // clears the text box
+            });
         }
 
     </script>
@@ -107,13 +122,11 @@
 <body>
     <br/>
     <div class="container">
-        <form class="form-inline justify-content-center">
+        <form class="form-inline justify-content-center" id="form input">
             <div class="form-group mx-sm-3 mb-2">
-                <label for="age_input" class="sr-only">Age</label>
-                <input type="number" min="1" step="1" class="form-control" id="age_input" placeholder="please enter your age" required>
-                <div class="invalid-feedback">Please enter your password to continue.</div>
+                <input type="number" min="1" step="1" id="age_input" placeholder="please enter your age" required>
             </div>
-            <button id="submit_btn" type="submit" class="btn btn-primary mb-2">Start</button>
+            <input id="submit_btn" type="button" class="btn btn-primary mb-2" value="Start"></input>
         </form>
     </div></br>
 
