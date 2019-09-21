@@ -26,6 +26,11 @@
                             beginAtZero: true,
                             suggestedMax: 70
                         }
+                    }],
+                    xAxes: [{ // hide the x-axes since we dont really need em
+                        ticks: {
+                            display: false
+                        }
                     }]
                 },
                 legend: {display: false},
@@ -53,12 +58,6 @@
                         display: true,
                         text: "Heart Rate Live Chart",
                         fontSize: 22
-                    }, scales: { // this hides the x-axis since we don't really need it
-                        xAxes: [{
-                            ticks: {
-                                display: false
-                            }
-                        }]
                     }
                 })
             });
@@ -81,13 +80,7 @@
                         display: true,
                         text: "Respiratory Rate Live Chart",
                         fontSize: 22
-                    }, scales: { // this hides the x-axis since we don't really need it
-                        xAxes: [{
-                            ticks: {
-                                display: false
-                            }
-                        }]
-                    } 
+                    }
                 })
             });
         
