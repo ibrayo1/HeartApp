@@ -57,4 +57,9 @@ io.on('connection', (socket) => {
         // console.log(input);
         port.write(input);
     });
+
+    // upon client disconnect then send instruction to arduino to stop running the mode
+    socket.on('disconnect', function(){
+        port.write('0,endMode');
+    });
 });

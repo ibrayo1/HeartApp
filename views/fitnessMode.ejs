@@ -108,11 +108,22 @@
                 }
             });
 
-            // 
-            document.getElementById('submit_btn').addEventListener("click", function(){
-                var val = document.getElementById('age_input').value; // get the value from the user
-                socket.emit('user_age_input', val.toString() + ',fitnessMode'); // send the data to server
-                document.getElementById('age_input').value = ""; // clears the text box
+            // on click listener for the start button
+            document.getElementById('start_btn').addEventListener("click", function(){
+                var inpt = document.getElementById('age_input'); // get the value from the user
+                socket.emit('user_age_input', inpt.value.toString() + ',fitnessMode'); // send the data to server
+                inpt.value = ""; // clears the text box
+                inpt.disabled = true; // disables the text input area for the age
+                document.getElementById('start_btn').style.visibility = 'hidden'; // hides the start button
+                document.getElementById('end_btn').style.visibility = 'visible'; // makes the end button visible
+            });
+
+            // on click listener for the end button
+            document.getElementById('end_btn').addEventListener("click", function(){
+                document.getElementById('age_input').disabled = false; // re enable the text area
+                document.getElementById('start_btn').style.visibility = 'visible'; // make the start button visible again
+                socket.emit('user_age_input', '0,endMode'); // send data to the server to stop the progarm that is running
+                document.getElementById('end_btn').style.visibility = 'hidden'; // hide the end button again
             });
         }
 
@@ -122,13 +133,34 @@
 <body>
     <br/>
     <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="card" style="border: none">
+                    <h4>Fitness Mode</h4>
+                    <p>Welcome to the fitness mode, 
+                    this mode is designed to monitor your heart and respiratory rates and
+                    give you what cardio zone you are in as feedback (see Fig 1 for details).
+                    To begin please enter your age below and click the start button. </p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <figure class="figure">
+                    <img src="/images/cardiozone.jpg" class="img-fluid">
+                    <figcaption class="figure-caption"><em>Fig 1: Heart rate zone as a percentage of the user's maximum heart rate.</em></figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
         <form class="form-inline justify-content-center" id="form input">
             <div class="form-group mx-sm-3 mb-2">
                 <input type="number" min="1" step="1" id="age_input" placeholder="please enter your age" required>
             </div>
-            <input id="submit_btn" type="button" class="btn btn-primary mb-2" value="Start"></input>
+            <input id="start_btn" type="button" class="btn btn-primary mb-2" value="Start"></input>
+            <input id="end_btn" type="button" class="btn btn-danger mb-2" style="visibility: hidden" value="End"></input>
         </form>
-    </div></br>
+    </div>
 
     <div class="container">
         <div class="row">
@@ -162,7 +194,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><br/>
 </body>
 
 </html>
