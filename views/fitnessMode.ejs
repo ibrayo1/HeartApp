@@ -142,6 +142,13 @@
                     give you what cardio zone you are in as feedback (see Fig 1 for details).
                     To begin please enter your age below and click the start button. </p>
                 </div>
+                <form class="form-inline justify-content-center" id="form input">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="number" min="1" step="1" id="age_input" placeholder="please enter your age" required>
+                    </div>
+                    <input id="start_btn" type="button" class="btn btn-primary mb-2" value="Start"></input>
+                    <input id="end_btn" type="button" class="btn btn-danger mb-2" style="visibility: hidden" value="End"></input>
+                </form>
             </div>
             <div class="col-lg-7">
                 <figure class="figure">
@@ -150,16 +157,6 @@
                 </figure>
             </div>
         </div>
-    </div>
-
-    <div class="container">
-        <form class="form-inline justify-content-center" id="form input">
-            <div class="form-group mx-sm-3 mb-2">
-                <input type="number" min="1" step="1" id="age_input" placeholder="please enter your age" required>
-            </div>
-            <input id="start_btn" type="button" class="btn btn-primary mb-2" value="Start"></input>
-            <input id="end_btn" type="button" class="btn btn-danger mb-2" style="visibility: hidden" value="End"></input>
-        </form>
     </div>
 
     <div class="container">
