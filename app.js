@@ -38,14 +38,18 @@ server.listen(3000, () => {
 
 const SerialPort = require('serialport'); 
 const Readline = SerialPort.parsers.Readline;
-const port = new SerialPort('COM3'); //Connect serial port to port COM3. Because my Arduino Board is connected on port COM3. See yours on Arduino IDE -> Tools -> Port
+const port = new SerialPort('COM4', {baudRate: 19200}); //Connect serial port to port COM3. Because my Arduino Board is connected on port COM3. See yours on Arduino IDE -> Tools -> Port
 const parser = port.pipe(new Readline({delimiter: '\r\n'})); //Read the line only when new line comes.
 
 parser.on('data', (rate) => { // Read data
-    console.log(rate);
     var today = new Date();
+
+    var res = rate.split(",");
+
+    console.log(res[0] + ' ' + res[1]);
+
     // emit the data
-    io.sockets.emit('rate', { time: (today.getMinutes())+":"+(today.getSeconds())+":"+(today.getMilliseconds()), rate: rate });
+    io.sockets.emit('rate', { time: (today.getMinutes())+":"+(today.getSeconds())+":"+(today.getMilliseconds()), rate: res[1], resp: res[0] });
 });
 
 

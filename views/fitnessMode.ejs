@@ -9,10 +9,12 @@
             var socket = io(); //connect to server
 
             // Configuration variables
-            var numberElements = 200;
+            var numberElements1 = 200;
+            var numberElements2 = 200;
 
             // Globals
-            var updateCount = 0;
+            var updateCount1 = 0;
+            var updateCount2 = 0;
 
             // chart objects
             var HeartRateChart = document.getElementById('HeartRateChart').getContext('2d');
@@ -20,19 +22,6 @@
 
             // config for the chart
             var config = {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            suggestedMax: 70
-                        }
-                    }],
-                    xAxes: [{ // hide the x-axes since we dont really need em
-                        ticks: {
-                            display: false
-                        }
-                    }]
-                },
                 legend: {display: false},
                 tooltips: {
                     enabled: false
@@ -58,6 +47,19 @@
                         display: true,
                         text: "Heart Rate Live Chart",
                         fontSize: 22
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMax: 70
+                            }
+                        }],
+                        xAxes: [{ // hide the x-axes since we dont really need em
+                            ticks: {
+                                display: false
+                            }
+                        }]
                     }
                 })
             });
@@ -80,24 +82,44 @@
                         display: true,
                         text: "Respiratory Rate Live Chart",
                         fontSize: 22
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                suggestedMin: 200
+                            }
+                        }],
+                        xAxes: [{ // hide the x-axes since we dont really need em
+                            ticks: {
+                                display: false
+                            }
+                        }]
                     }
                 })
             });
         
-            // update the chart from the data collected through the serial
+            // update the heart chart from the data collected through the serial
             socket.on('rate', function(data){
-                console.log(data.rate); // log data on console
+                //console.log(data.rate); // log data on console
 
                 heartChart.data.labels.push(data.time);
                 heartChart.data.datasets.forEach((dataset) => {dataset.data.push(data.rate)});
                 
+                respiratoryChart.data.labels.push(data.time);
+                respiratoryChart.data.datasets.forEach((dataset) => {dataset.data.push(data.resp)});
+
                 // scroll the graph
-                if(updateCount > numberElements){
+                if(updateCount1 > numberElements1){
                     heartChart.data.labels.shift();
                     heartChart.data.datasets[0].data.shift();
-                } else { updateCount++; }
+
+                    respiratoryChart.data.labels.shift();
+                    respiratoryChart.data.datasets[0].data.shift();
+
+                } else { updateCount1++; }
 
                 heartChart.update(); // Update the graph.
+                respiratoryChart.update();
             });
 
             // disables the user from pressing enter on form input
