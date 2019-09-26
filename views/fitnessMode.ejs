@@ -9,12 +9,10 @@
             var socket = io(); //connect to server
 
             // Configuration variables
-            var numberElements1 = 200;
-            var numberElements2 = 200;
+            var numberElements = 200;
 
             // Globals
-            var updateCount1 = 0;
-            var updateCount2 = 0;
+            var updateCount = 0;
 
             // chart objects
             var HeartRateChart = document.getElementById('HeartRateChart').getContext('2d');
@@ -110,14 +108,14 @@
                 respiratoryChart.data.datasets.forEach((dataset) => {dataset.data.push(data.resp)});
 
                 // scroll the graph
-                if(updateCount1 > numberElements1){
+                if(updateCount > numberElements){
                     heartChart.data.labels.shift();
                     heartChart.data.datasets[0].data.shift();
 
                     respiratoryChart.data.labels.shift();
                     respiratoryChart.data.datasets[0].data.shift();
 
-                } else { updateCount1++; }
+                } else { updateCount++; }
 
                 heartChart.update(); // Update the graph.
                 respiratoryChart.update();
