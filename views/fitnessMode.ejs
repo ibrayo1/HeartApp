@@ -132,7 +132,7 @@
             // on click listener for the start button
             document.getElementById('start_btn').addEventListener("click", function(){
                 var inpt = document.getElementById('age_input'); // get the value from the user
-                socket.emit('user_age_input', inpt.value.toString() + ',fitnessMode'); // send the data to server
+                socket.emit('user_age_input', inpt.value.toString() + ',fit'); // send the data to server
                 inpt.value = ""; // clears the text box
                 inpt.disabled = true; // disables the text input area for the age
                 document.getElementById('start_btn').style.visibility = 'hidden'; // hides the start button
