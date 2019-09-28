@@ -44,12 +44,13 @@ const parser = port.pipe(new Readline({delimiter: '\r\n'})); //Read the line onl
 parser.on('data', (rate) => { // Read data
     var today = new Date();
 
+    //console.log(rate);
     var res = rate.split(",");
 
     console.log(res[0] + ' ' + res[1]);
 
     // emit the data
-    io.sockets.emit('rate', { time: (today.getMinutes())+":"+(today.getSeconds())+":"+(today.getMilliseconds()), rate: res[1], resp: res[0] });
+    io.sockets.emit('rate', { time: (today.getMinutes())+":"+(today.getSeconds())+":"+(today.getMilliseconds()), rate: res[0], resp: res[1] });
 });
 
 

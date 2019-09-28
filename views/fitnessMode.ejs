@@ -84,7 +84,7 @@
                     scales: {
                         yAxes: [{
                             ticks: {
-                                suggestedMin: 200,
+                                suggestedMin: 380,
                                 suggestedMax: 400
                             }
                         }],
@@ -146,6 +146,34 @@
                 socket.emit('user_age_input', '0,endMode'); // send data to the server to stop the progarm that is running
                 document.getElementById('end_btn').style.visibility = 'hidden'; // hide the end button again
             });
+
+            // list of colors for the different zones
+            var colorList = {t1: 'gray', t2: 'blue', t3: 'green', t4: 'orange', t5: 'red'};
+
+            colorize = function(colorList) {
+                var container = document.getElementById('zones');
+            
+                for (var key in colorList) {
+                    var boxContainer = document.createElement("col-lg-5ths");
+                    var box = document.createElement("DIV");
+                    var label = document.createElement("SPAN");
+                    label.style.paddingLeft = "10px";
+                    label.style.paddingRight = "55px";
+
+                    label.innerHTML = key;
+                    box.className = "box";
+                    box.style.backgroundColor = colorList[key];
+
+                    boxContainer.appendChild(box);
+                    boxContainer.appendChild(label);
+
+                    container.appendChild(boxContainer);
+
+                }
+            }
+
+            colorize(colorList);
+
         }
 
     </script>
@@ -186,6 +214,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <div style="height: 100%" class="card">
+                    <h4 style="text-align: center" id="bpm">0</h4>
                     <h4 style="text-align: center;">Heart Rate (BPM)</h4>
                 </div>
             </div>
@@ -201,9 +230,17 @@
     <br/>
     <div class="container">
         <div class="row">
+            <div class="col-lg-12">
+                <div id="zones" style="text-align: center" ></div>
+            </div>
+        </div>
+    </div><br/>
+    <div class="container">
+        <div class="row">
             <div class="col-lg-4">
                 <div style="height: 100%" class="card">
-                    <h4 style="text-align: center;">Respiratory Rate (BPM)</h4>
+                    <h4 style="text-align: center" id="rr">0</h4>
+                    <h4 style="text-align: center;">Respiratory Rate</h4>
                 </div>
             </div>
             <div class="col-lg-8">
