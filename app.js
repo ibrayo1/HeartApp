@@ -30,6 +30,11 @@ app.get('/meditationMode', function(req, res){
     res.render('meditationMode');
 });
 
+// get request for the lung capacity mode
+app.get('/lungCapMode', function(req, res){
+    res.render('lungCapMode');
+});
+
 // Start the server, listening on port 3000
 server.listen(3000, () => {
     console.log("Listening to requests on port 3000...");
@@ -37,7 +42,7 @@ server.listen(3000, () => {
 
 const SerialPort = require('serialport'); 
 const Readline = SerialPort.parsers.Readline;
-const port = new SerialPort('COM4', {baudRate: 19200}); //Connect serial port to port COM3. Because my Arduino Board is connected on port COM3. See yours on Arduino IDE -> Tools -> Port
+const port = new SerialPort('/dev/cu.usbmodem12345671', {baudRate: 19200}); //Connect serial port to port COM3. Because my Arduino Board is connected on port COM3. See yours on Arduino IDE -> Tools -> Port
 const parser = port.pipe(new Readline({delimiter: '\r\n'})); //Read the line only when new line comes.
 
 parser.on('data', (rate) => { // Read data
@@ -46,7 +51,7 @@ parser.on('data', (rate) => { // Read data
     //console.log(rate);
     var res = rate.split(",");
 
-    console.log(res[0] + ' ' + res[1]);
+    console.log(res[0] + ' ' + res[1] + ' ' + res[2]);
 
     // emit the data
     io.sockets.emit('rate', { time: (today.getMinutes())+":"+(today.getSeconds())+":"+(today.getMilliseconds()), rate: res[0], resp: res[1] });
@@ -64,6 +69,6 @@ io.on('connection', (socket) => {
 
     // upon client disconnect then send instruction to arduino to stop running the mode
     socket.on('disconnect', function(){
-        port.write('0,endMode');
+        port.write('e'); // e for end
     });
 });

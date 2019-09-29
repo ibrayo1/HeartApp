@@ -15,7 +15,6 @@
             var updateCount = 0;
 
             // chart objects
-            var HeartRateChart = document.getElementById('HeartRateChart').getContext('2d');
             var RespiratoryChart = document.getElementById('RespiratoryRateChart').getContext('2d');
 
             // config for the chart
@@ -25,42 +24,6 @@
                     enabled: false
                 }
             }
-
-            // create a new for the heart rate chart
-            var heartChart = new Chart(HeartRateChart, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: "Heart Rate",
-                        data: [],
-                        fill: false,
-                        borderColor: '#3498DB',
-                        borderWidth: 2,
-                        pointRadius: 0
-                    }]
-                },
-                options: Object.assign({}, config, {
-                    title:{
-                        display: true,
-                        text: "Heart Rate Live Chart",
-                        fontSize: 22
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                suggestedMax: 1000,
-                                suggestedMin: 300
-                            }
-                        }],
-                        xAxes: [{ // hide the x-axes since we dont really need em
-                            ticks: {
-                                display: false
-                            }
-                        }]
-                    }
-                })
-            });
 
             var respiratoryChart = new Chart(RespiratoryChart, {
                 type: 'line',
@@ -100,24 +63,19 @@
             // update the heart chart from the data collected through the serial
             socket.on('rate', function(data){
                 //console.log(data.rate); // log data on console
-
-                heartChart.data.labels.push(data.time);
-                heartChart.data.datasets.forEach((dataset) => {dataset.data.push(data.rate)});
                 
                 respiratoryChart.data.labels.push(data.time);
                 respiratoryChart.data.datasets.forEach((dataset) => {dataset.data.push(data.resp)});
 
                 // scroll the graph
                 if(updateCount > numberElements){
-                    heartChart.data.labels.shift();
-                    heartChart.data.datasets[0].data.shift();
 
                     respiratoryChart.data.labels.shift();
                     respiratoryChart.data.datasets[0].data.shift();
 
                 } else { updateCount++; }
 
-                heartChart.update(); // Update the graph.
+                // Update the graph.
                 respiratoryChart.update();
             });
 
@@ -132,7 +90,7 @@
             // on click listener for the start button
             document.getElementById('start_btn').addEventListener("click", function(){
                 var inpt = document.getElementById('age_input'); // get the value from the user
-                socket.emit('user_age_input', 'm'); // send the data to server
+                socket.emit('user_age_input', 'f'); // send the data to server
                 inpt.value = ""; // clears the text box
                 inpt.disabled = true; // disables the text input area for the age
                 document.getElementById('start_btn').style.visibility = 'hidden'; // hides the start button
@@ -158,14 +116,14 @@
         <div class="row">
             <div class="col-lg-5">
                 <div class="card" style="border: none">
-                    <h4>Meditation Mode</h4>
-                    <p>Welcome to the meditation mode, 
-                    this mode is designed to help you meditate. In this mode you must breathe so that 
-                    your inhalation rate is one third of your exhalation rate. If you fail to do so for 
-                    three consecutive times a buzzer which is attached to your heart rate monitor will go off
-                    to signal you that your breathing is out of sync. This mode starts off by taking your 
-                    resting heart rate in the first 30 seconds so please stop doing any physical activity to ensure maximum accuracy. 
-                    To begin please enter your age below and click the start button. </p>
+                    <h4>Lung Capacity Mode</h4>
+                    <p>Welcome to the Lung Capacity Mode, 
+                       this mode is designed to help you to increase your lung capacity.
+                       First place your hands on your hips with our thumbs facing front with 
+                       your pinkies touching the small of your back. Then simply hit start and 
+                       slowly breathe in as much as you can and a timer will begin to run 
+                       for 20 seconds. After the timer ends exhale slowly, relax and repeat the steps
+                       three more times. </p>
                 </div>
                 <form class="form-inline justify-content-center" id="form input">
                     <div class="form-group mx-sm-3 mb-2">
@@ -175,32 +133,12 @@
                     <input id="end_btn" type="button" class="btn btn-danger mb-2" style="visibility: hidden" value="End"></input>
                 </form>
             </div>
-            <div class="col-lg-7">
-                <figure class="figure" style="text-align: center">
-                    <img width="80%" src="/images/meditationImage.jpg" class="img-fluid">
-                </figure>
+            <div class="col-lg-7" style="text-align: center" >
+                <img src="/images/lungCapImage.jpg" class="img-fluid">
             </div>
         </div>
-    </div>
+    </div><br/>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div style="height: 100%" class="card">
-                    <h4 style="text-align: center" id="bpm">0</h4>
-                    <h4 style="text-align: center;">Heart Rate (BPM)</h4>
-                </div>
-            </div>
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-body">
-                        <canvas height="100" id="HeartRateChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br/>
     <div class="container">
         <div class="row">
             <div class="col-lg-4">

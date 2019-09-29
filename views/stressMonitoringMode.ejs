@@ -49,8 +49,8 @@
                     scales: {
                         yAxes: [{
                             ticks: {
-                                beginAtZero: true,
-                                suggestedMax: 70
+                                suggestedMax: 1000,
+                                suggestedMin: 300,
                             }
                         }],
                         xAxes: [{ // hide the x-axes since we dont really need em
@@ -132,7 +132,7 @@
             // on click listener for the start button
             document.getElementById('start_btn').addEventListener("click", function(){
                 var inpt = document.getElementById('age_input'); // get the value from the user
-                socket.emit('user_age_input', inpt.value.toString() + ',str'); // send the data to server
+                socket.emit('user_age_input', 's'); // send the data to server
                 inpt.value = ""; // clears the text box
                 inpt.disabled = true; // disables the text input area for the age
                 document.getElementById('start_btn').style.visibility = 'hidden'; // hides the start button
@@ -143,7 +143,7 @@
             document.getElementById('end_btn').addEventListener("click", function(){
                 document.getElementById('age_input').disabled = false; // re enable the text area
                 document.getElementById('start_btn').style.visibility = 'visible'; // make the start button visible again
-                socket.emit('user_age_input', '0,endMode'); // send data to the server to stop the progarm that is running
+                socket.emit('user_age_input', 'e'); // send data to the server to stop the progarm that is running
                 document.getElementById('end_btn').style.visibility = 'hidden'; // hide the end button again
             });
 
