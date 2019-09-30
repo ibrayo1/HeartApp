@@ -42,7 +42,7 @@ server.listen(3000, () => {
 
 const SerialPort = require('serialport'); 
 const Readline = SerialPort.parsers.Readline;
-const port = new SerialPort('/dev/cu.usbmodem12345671', {baudRate: 19200}); //Connect serial port to port COM3. Because my Arduino Board is connected on port COM3. See yours on Arduino IDE -> Tools -> Port
+const port = new SerialPort('COM4', {baudRate: 19200}); //Connect serial port to port COM3. Because my Arduino Board is connected on port COM3. See yours on Arduino IDE -> Tools -> Port
 const parser = port.pipe(new Readline({delimiter: '\r\n'})); //Read the line only when new line comes.
 
 parser.on('data', (rate) => { // Read data
