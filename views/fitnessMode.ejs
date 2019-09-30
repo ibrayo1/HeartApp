@@ -101,6 +101,8 @@
             socket.on('rate', function(data){
                 //console.log(data.rate); // log data on console
 
+                document.getElementById('bpm').innerHTML = data.bpm;
+
                 heartChart.data.labels.push(data.time);
                 heartChart.data.datasets.forEach((dataset) => {dataset.data.push(data.rate)});
                 

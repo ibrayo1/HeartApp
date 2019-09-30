@@ -89,17 +89,13 @@
 
             // on click listener for the start button
             document.getElementById('start_btn').addEventListener("click", function(){
-                var inpt = document.getElementById('age_input'); // get the value from the user
-                socket.emit('user_age_input', 'f'); // send the data to server
-                inpt.value = ""; // clears the text box
-                inpt.disabled = true; // disables the text input area for the age
+                socket.emit('user_age_input', 'l'); // send the data to server
                 document.getElementById('start_btn').style.visibility = 'hidden'; // hides the start button
                 document.getElementById('end_btn').style.visibility = 'visible'; // makes the end button visible
             });
 
             // on click listener for the end button
             document.getElementById('end_btn').addEventListener("click", function(){
-                document.getElementById('age_input').disabled = false; // re enable the text area
                 document.getElementById('start_btn').style.visibility = 'visible'; // make the start button visible again
                 socket.emit('user_age_input', 'e'); // send data to the server to stop the progarm that is running
                 document.getElementById('end_btn').style.visibility = 'hidden'; // hide the end button again
@@ -126,9 +122,6 @@
                        three more times. </p>
                 </div>
                 <form class="form-inline justify-content-center" id="form input">
-                    <div class="form-group mx-sm-3 mb-2">
-                        <input type="number" min="1" step="1" id="age_input" placeholder="please enter your age" required>
-                    </div>
                     <input id="start_btn" type="button" class="btn btn-primary mb-2" value="Start"></input>
                     <input id="end_btn" type="button" class="btn btn-danger mb-2" style="visibility: hidden" value="End"></input>
                 </form>

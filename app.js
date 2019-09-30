@@ -51,10 +51,10 @@ parser.on('data', (rate) => { // Read data
     //console.log(rate);
     var res = rate.split(",");
 
-    console.log(res[0] + ' ' + res[1] + ' ' + res[2]);
+    console.log(res[0] + ' ' + res[1] + ' ' + res[2] + ' ' + red[3] + ' ' + res[4]);
 
     // emit the data
-    io.sockets.emit('rate', { time: (today.getMinutes())+":"+(today.getSeconds())+":"+(today.getMilliseconds()), rate: res[0], resp: res[1] });
+    io.sockets.emit('rate', { time: (today.getMinutes())+":"+(today.getSeconds())+":"+(today.getMilliseconds()), rate: res[0], resp: res[1], bpm: res[2] });
 });
 
 
