@@ -13,6 +13,7 @@
 
             // Globals
             var updateCount = 0;
+            var breathThreshold = 0;
 
             // chart objects
             var RespiratoryChart = document.getElementById('RespiratoryRateChart').getContext('2d');
@@ -64,6 +65,8 @@
             socket.on('rate', function(data){
                 //console.log(data.rate); // log data on console
                 
+                breathThreshold = data.resp; // store the data recieved from the arduino to this var
+
                 respiratoryChart.data.labels.push(data.time);
                 respiratoryChart.data.datasets.forEach((dataset) => {dataset.data.push(data.resp)});
 
@@ -101,6 +104,31 @@
                 document.getElementById('end_btn').style.visibility = 'hidden'; // hide the end button again
             });
 
+            // function for timer
+            function startTimer(duration, display) {
+                var timer = duration, seconds;
+                setInterval(function () {
+                    seconds = parseInt(timer % 60, 10);
+
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    display.text(seconds);
+
+                    if (--timer < 0) {
+                        timer = duration;
+                    }
+                }, 1000);
+            }
+
+            // jquery for the time
+            jQuery(function ($) {
+                var twentySeconds = 20,
+                    display = $('#time');
+                if (breathThreshold >= 390){
+                    startTimer(twentySeconds, display);
+                }
+            });
+
         }
 
     </script>
@@ -125,6 +153,7 @@
                     <input id="start_btn" type="button" class="btn btn-primary mb-2" value="Start"></input>
                     <input id="end_btn" type="button" class="btn btn-danger mb-2" style="visibility: hidden" value="End"></input>
                 </form>
+                <div style="text-align: center">Hold your breath for <span id="time">20</span> seconds!</div>
             </div>
             <div class="col-lg-7" style="text-align: center" >
                 <img src="/images/lungCapImage.jpg" class="img-fluid">

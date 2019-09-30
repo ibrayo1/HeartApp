@@ -10,6 +10,7 @@
 
             // Configuration variables
             var numberElements = 200;
+            var maxAge = 0;
 
             // Globals
             var updateCount = 0;
@@ -135,6 +136,7 @@
             document.getElementById('start_btn').addEventListener("click", function(){
                 var inpt = document.getElementById('age_input'); // get the value from the user
                 socket.emit('user_age_input', 'f'); // send the data to server
+                maxAge = 220 - inpt.value; // sets the max age
                 inpt.value = ""; // clears the text box
                 inpt.disabled = true; // disables the text input area for the age
                 document.getElementById('start_btn').style.visibility = 'hidden'; // hides the start button
@@ -148,33 +150,6 @@
                 socket.emit('user_age_input', 'e'); // send data to the server to stop the progarm that is running
                 document.getElementById('end_btn').style.visibility = 'hidden'; // hide the end button again
             });
-
-            // list of colors for the different zones
-            var colorList = {t1: 'gray', t2: 'blue', t3: 'green', t4: 'orange', t5: 'red'};
-
-            colorize = function(colorList) {
-                var container = document.getElementById('zones');
-            
-                for (var key in colorList) {
-                    var boxContainer = document.createElement("col-lg-5ths");
-                    var box = document.createElement("DIV");
-                    var label = document.createElement("SPAN");
-                    label.style.paddingLeft = "10px";
-                    label.style.paddingRight = "55px";
-
-                    label.innerHTML = key;
-                    box.className = "box";
-                    box.style.backgroundColor = colorList[key];
-
-                    boxContainer.appendChild(box);
-                    boxContainer.appendChild(label);
-
-                    container.appendChild(boxContainer);
-
-                }
-            }
-
-            colorize(colorList);
 
         }
 
@@ -231,9 +206,26 @@
     </div>
     <br/>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div id="zones" style="text-align: center" ></div>
+        <div class="row" style="justify-content: center">
+            <div class="col-md-2" style="text-align: center">
+                <div class="box" style="background-color: gray"></div>
+                <label style="font-size: 20px"><span id="z_1_min">00</span>:<span id="z_1_sec">00</span></label>
+            </div>
+            <div class="col-md-2" style="text-align: center">
+                <div class="box" style="background-color: blue"></div>
+                <label style="font-size: 20px"><span id="z_2_min">00</span>:<span id="z_2_sec">00</span></label>
+            </div>
+            <div class="col-md-2" style="text-align: center">
+                <div class="box" style="background-color: green"></div>
+                <label style="font-size: 20px"><span id="z_3_min">00</span>:<span id="z_3_sec">00</span></label>
+            </div>
+            <div class="col-md-2" style="text-align: center">
+                <div class="box" style="background-color: orange"></div>
+                <label style="font-size: 20px"><span id="z_4_min">00</span>:<span id="z_4_sec">00</span></label>
+            </div>
+            <div class="col-md-2" style="text-align: center">
+                <div class="box" style="background-color: red"></div>
+                <label style="font-size: 20px"><span id="z_5_min">00</span>:<span id="z_5_sec">00</span></label>
             </div>
         </div>
     </div><br/>
