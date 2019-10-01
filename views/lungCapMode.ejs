@@ -66,15 +66,9 @@
                 //console.log(data.rate); // log data on console
                 
                 breathThreshold = data.resp; // store the data recieved from the arduino to this var
-
-                // jquery for the time
-                jQuery(function ($) {
-                    var twentySeconds = 20,
-                        display = $('#time');
-                    if (breathThreshold >= 300){
-                        startTimer(twentySeconds, display);
-                    }
-                });
+                document.getElementById('inhale').innerHTML = data.inhale / 1000;
+                document.getElementById('exhale').innerHTML = data.exhale / 1000;
+                document.getElementById('rr').innerHTML = parseInt( ((data.exhale + data.inhale) / 1000) / 10 );
 
                 respiratoryChart.data.labels.push(data.time);
                 respiratoryChart.data.datasets.forEach((dataset) => {dataset.data.push(data.resp)});
@@ -101,7 +95,7 @@
 
             // on click listener for the start button
             document.getElementById('start_btn').addEventListener("click", function(){
-                socket.emit('user_age_input', 'l'); // send the data to server
+                socket.emit('user_age_input', 'lun'); // send the data to server
                 document.getElementById('start_btn').style.visibility = 'hidden'; // hides the start button
                 document.getElementById('end_btn').style.visibility = 'visible'; // makes the end button visible
             });
@@ -109,7 +103,7 @@
             // on click listener for the end button
             document.getElementById('end_btn').addEventListener("click", function(){
                 document.getElementById('start_btn').style.visibility = 'visible'; // make the start button visible again
-                socket.emit('user_age_input', 'e'); // send data to the server to stop the progarm that is running
+                socket.emit('user_age_input', 'end'); // send data to the server to stop the progarm that is running
                 document.getElementById('end_btn').style.visibility = 'hidden'; // hide the end button again
             });
 
@@ -129,6 +123,14 @@
                 }, 1000);
             }
 
+            // jquery for the time
+            jQuery(function ($) {
+                var twentySeconds = 20,
+                    display = $('#time');
+                if (breathThreshold >= 300){
+                    startTimer(twentySeconds, display);
+                }
+            });
 
         }
 
@@ -166,8 +168,10 @@
         <div class="row">
             <div class="col-lg-4">
                 <div style="height: 100%" class="card">
-                    <h4 style="text-align: center" id="rr">0</h4>
+                    <h4 style="text-align: center; font-size: 45px" id="rr">0</h4>
                     <h4 style="text-align: center;">Respiratory Rate</h4>
+                    <label>In: <h4 style="text-align: center; font-size: 30px" id="inhale">0</h4></label>
+                    <label>Ex: <h4 style="text-align: center; font-size: 30px" id="exhale">0</h4></label>
                 </div>
             </div>
             <div class="col-lg-8">

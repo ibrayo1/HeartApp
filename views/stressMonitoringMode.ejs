@@ -102,6 +102,9 @@
                 //console.log(data.rate); // log data on console
 
                 document.getElementById('bpm').innerHTML = data.bpm; // update the bpm placeholder
+                document.getElementById('inhale').innerHTML = data.inhale / 1000;
+                document.getElementById('exhale').innerHTML = data.exhale / 1000;
+                document.getElementById('rr').innerHTML = parseInt( ((data.exhale + data.inhale) / 1000) / 10);
 
                 heartChart.data.labels.push(data.time);
                 heartChart.data.datasets.forEach((dataset) => {dataset.data.push(data.rate)});
@@ -134,7 +137,7 @@
             // on click listener for the start button
             document.getElementById('start_btn').addEventListener("click", function(){
                 var inpt = document.getElementById('age_input'); // get the value from the user
-                socket.emit('user_age_input', 's'); // send the data to server
+                socket.emit('user_age_input', 'str'); // send the data to server
                 inpt.value = ""; // clears the text box
                 inpt.disabled = true; // disables the text input area for the age
                 document.getElementById('start_btn').style.visibility = 'hidden'; // hides the start button
@@ -145,7 +148,7 @@
             document.getElementById('end_btn').addEventListener("click", function(){
                 document.getElementById('age_input').disabled = false; // re enable the text area
                 document.getElementById('start_btn').style.visibility = 'visible'; // make the start button visible again
-                socket.emit('user_age_input', 'e'); // send data to the server to stop the progarm that is running
+                socket.emit('user_age_input', 'end'); // send data to the server to stop the progarm that is running
                 document.getElementById('end_btn').style.visibility = 'hidden'; // hide the end button again
             });
 
@@ -195,7 +198,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <div style="height: 100%" class="card">
-                    <h4 style="text-align: center" id="bpm">0</h4>
+                    <h4 style="text-align: center; font-size: 45px;" id="bpm">0</h4>
                     <h4 style="text-align: center;">Heart Rate (BPM)</h4>
                 </div>
             </div>
@@ -213,8 +216,10 @@
         <div class="row">
             <div class="col-lg-4">
                 <div style="height: 100%" class="card">
-                    <h4 style="text-align: center" id="rr">0</h4>
+                    <h4 style="text-align: center; font-size: 45px" id="rr">0</h4>
                     <h4 style="text-align: center;">Respiratory Rate</h4>
+                    <label>In: <h4 style="text-align: center; font-size: 30px" id="inhale">0</h4></label>
+                    <label>Ex: <h4 style="text-align: center; font-size: 30px" id="exhale">0</h4></label>
                 </div>
             </div>
             <div class="col-lg-8">
