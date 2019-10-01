@@ -67,6 +67,15 @@
                 
                 breathThreshold = data.resp; // store the data recieved from the arduino to this var
 
+                // jquery for the time
+                jQuery(function ($) {
+                    var twentySeconds = 20,
+                        display = $('#time');
+                    if (breathThreshold >= 300){
+                        startTimer(twentySeconds, display);
+                    }
+                });
+
                 respiratoryChart.data.labels.push(data.time);
                 respiratoryChart.data.datasets.forEach((dataset) => {dataset.data.push(data.resp)});
 
@@ -120,14 +129,6 @@
                 }, 1000);
             }
 
-            // jquery for the time
-            jQuery(function ($) {
-                var twentySeconds = 20,
-                    display = $('#time');
-                if (breathThreshold >= 390){
-                    startTimer(twentySeconds, display);
-                }
-            });
 
         }
 

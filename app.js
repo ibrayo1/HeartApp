@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
 
     // listen to data being sent from 
     socket.on('user_age_input', function(input){
-        // console.log(input);
+        console.log(input);
         port.write(input);
     });
 
