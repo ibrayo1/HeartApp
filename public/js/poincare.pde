@@ -28,7 +28,29 @@ boolean pulse = false;    // pulse is made true in serialEvent when arduino send
 boolean makeLine = false; // press 'L' to toggle a trace the last 20 dots on the Poincare Plot
 
 // SERIAL PORT STUFF TO HELP YOU FIND THE CORRECT SERIAL PORT
-String serialPort = "COM3";
+//String serialPort = "COM4";
+
+let socket = io();
+var ibi = 0;
+var ppg = 0;
+
+socket.on('rate', function(data){
+    //console.log(data.HR);
+    //ibi = data.IBI;
+
+    int newPPG = parseInt(data.HR);
+
+    for (int i = 0; i < PPG.length-1; i++){
+        PPG[i] = PPG[i+1];
+    }
+
+    PPG[PPG.length-1] = int(map(newPPG,50,900,(height/2+15)+225,(height/2+15)-225));
+
+    IBI = parseInt(data.IBI);
+    pulse = true;
+
+});
+
 
 void setup() {                     // do all the sett'n up in the setup
   size(800,650);                     // Stage size
@@ -135,7 +157,7 @@ void writeAxisLabels(){
   }
   HRV = (int)sqrt(sum / (numPoints-1));
   //println(sqrt(sum/numPoints));
-  console.log( sqrt(sum /numPoints) );
+  //console.log( sqrt(sum /numPoints) );
   text("HRV: " + HRV + "ms", width/2-50, 55);
   
   fill(200);                                // draw the Plot coordinate values in grey
@@ -179,8 +201,9 @@ void serialEvent(Serial port){
         return; 
     }
     
-    String[] vals = split(inData, ',');
-    int newPPG = int(vals[0]);
+    //String[] vals = split(inData, ',');
+    //int newPPG = int(vals[0]);
+    int newPPG = parseInt(ppg);
 
     for (int i = 0; i < PPG.length-1; i++){
         PPG[i] = PPG[i+1];
@@ -188,7 +211,7 @@ void serialEvent(Serial port){
 
     PPG[PPG.length-1] = int(map(newPPG,50,900,(height/2+15)+225,(height/2+15)-225));
 
-    IBI = Integer.parseInt(vals[1]);
+    IBI = parseInt(ibi);
     pulse = true;
   }
   catch(Exception e){
