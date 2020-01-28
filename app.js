@@ -12,7 +12,7 @@ app.use(express.static('public'));
 
 
 app.get('/', function(req, res){
-    res.render('index');
+    res.render('/index');
 });
 
 // get request for fitness mode page
