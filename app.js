@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server); // Bind socket.io to our express server.
 var ejs = require('ejs');
+const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 
@@ -36,7 +37,7 @@ app.get('/lungCapMode', function(req, res){
 });
 
 // Start the server, listening on port 3000
-server.listen(3000, () => {
+server.listen(PORT, () => {
     console.log("Listening to requests on port 3000...");
 });
 
