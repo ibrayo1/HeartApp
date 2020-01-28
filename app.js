@@ -38,7 +38,7 @@ app.get('/lungCapMode', function(req, res){
 
 // Start the server, listening on port 3000
 server.listen(PORT, () => {
-    console.log("Listening to requests on port 3000...");
+    console.log(`Listening to requests on ${server.address().port}`);
 });
 
 const SerialPort = require('serialport'); 
